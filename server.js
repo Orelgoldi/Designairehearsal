@@ -18,7 +18,7 @@ function readAll() {
 
 function getToken() {
   const email = process.env.ADMIN_EMAIL    || 'info.aidesign1@gmail.com';
-  const pass  = process.env.ADMIN_PASSWORD || 'DesignAI2024';
+  const pass  = process.env.ADMIN_PASSWORD || 'lukathedog2026';
   return crypto.createHmac('sha256', pass).update(email).digest('hex');
 }
 
@@ -44,7 +44,7 @@ app.post('/api/rehearsal/submit', (req, res) => {
 app.post('/api/admin/login', (req, res) => {
   const { email, password } = req.body || {};
   const adminEmail = process.env.ADMIN_EMAIL    || 'info.aidesign1@gmail.com';
-  const adminPass  = process.env.ADMIN_PASSWORD || 'DesignAI2024';
+  const adminPass  = process.env.ADMIN_PASSWORD || 'lukathedog2026';
   if (email === adminEmail && password === adminPass) {
     res.json({ ok: true, token: getToken() });
   } else {
