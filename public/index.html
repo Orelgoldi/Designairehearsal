@@ -59,11 +59,20 @@
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 28px;
-    padding: 56px 64px;
+    padding: 48px 40px;
     max-width: 580px;
-    width: 90%;
+    width: 92%;
     text-align: center;
     box-shadow: 0 32px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 36px 24px; border-radius: 20px; }
+    .logo svg { width: 110px; }
+    .logo { margin-bottom: 28px; }
+    .badge { font-size: 11px; letter-spacing: 1px; margin-bottom: 16px; }
+    .subtitle { font-size: 1rem; margin-bottom: 36px; }
+    .cta { font-size: 1.05rem; padding: 16px 36px; width: 100%; display: block; }
   }
 
   .logo { margin-bottom: 40px; }
