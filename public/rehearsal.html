@@ -47,6 +47,7 @@
     .bg-sparkle::before, .bg-sparkle::after { content: ''; position: absolute; background: rgba(44,255,223,0.25); }
     .bg-sparkle::before { width: 5px; height: 36px; left: 15px; top: 0; }
     .bg-sparkle::after  { width: 36px; height: 5px; top: 15px; left: 0; }
+    @media (max-width: 600px) { .bg-sparkle { display: none; } }
 
     /* ─── Views ─── */
     #gridView, #formView {
