@@ -187,26 +187,12 @@
     <p>בחרו את שמכם והכניסו את קוד הגישה שקיבלתם</p>
 
     <div class="form-group">
-      <label>שם המרצה</label>
-      <select id="loginName">
-        <option value="">— בחרו שם —</option>
-        <option>דניאל בוארון</option>
-        <option>עומרי הרמן</option>
-        <option>גל דולב</option>
-        <option>חן האנה ויצמן</option>
-        <option>ד"ר יעקב גרינשפן</option>
-        <option>רון ברנוב</option>
-        <option>שחר קגן</option>
-        <option>עידו זייפמן וקרן שגב</option>
-        <option>ענבל ברקוביץ</option>
-        <option>טל זגורי</option>
-        <option>שירה וינברג הראל</option>
-        <option>שלי אור גיסר</option>
-      </select>
+      <label>כתובת מייל</label>
+      <input type="email" id="loginEmail" placeholder="" autocomplete="email"/>
     </div>
     <div class="form-group">
-      <label>קוד גישה</label>
-      <input type="password" id="loginCode" placeholder="" onkeydown="if(event.key==='Enter') doLogin()"/>
+      <label>סיסמה</label>
+      <input type="password" id="loginCode" placeholder="" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()"/>
     </div>
     <button class="login-btn" onclick="doLogin()">כניסה לפידבק שלי</button>
     <div class="login-error" id="loginError"></div>
@@ -263,18 +249,18 @@ function stars(n) { return '★'.repeat(n) + '☆'.repeat(5 - n); }
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
 async function doLogin() {
-  const name = document.getElementById('loginName').value.trim();
-  const code = document.getElementById('loginCode').value.trim();
-  const err  = document.getElementById('loginError');
+  const email = document.getElementById('loginEmail').value.trim();
+  const code  = document.getElementById('loginCode').value.trim();
+  const err   = document.getElementById('loginError');
   err.style.display = 'none';
-  if (!name) { err.textContent = 'אנא בחרו שם'; err.style.display = 'block'; return; }
-  if (!code) { err.textContent = 'אנא הכניסו קוד גישה'; err.style.display = 'block'; return; }
+  if (!email) { err.textContent = 'אנא הכניסו מייל'; err.style.display = 'block'; return; }
+  if (!code)  { err.textContent = 'אנא הכניסו סיסמה'; err.style.display = 'block'; return; }
 
   try {
     const res  = await fetch('/api/speaker/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ speakerName: name, password: code })
+      body: JSON.stringify({ email, password: code })
     });
     const data = await res.json();
     if (!data.ok) { err.textContent = data.error || 'קוד גישה שגוי'; err.style.display = 'block'; return; }

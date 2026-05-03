@@ -11,6 +11,22 @@ if (!fs.existsSync(DB)) fs.writeFileSync(DB, '');
 app.use(express.json({ limit: '5mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// email → { name, password }
+const SPEAKER_CREDENTIALS = {
+  'shellygisser@gmail.com':       { name: 'שלי אור גיסר',         password: 'שלי אור גיסר' },
+  'shira@go-beyondai.com':        { name: 'שירה וינברג הראל',     password: 'שירה וינברג הראל' },
+  'daniel.boaron2303@gmail.com':  { name: 'דניאל בוארון',         password: 'דניאל בוארון' },
+  'rbaranov@figma.com':           { name: 'רון ברנוב',            password: 'רון ברנוב' },
+  'greenshpan.yaakov@gmail.com':  { name: 'ד"ר יעקב גרינשפן',    password: 'ד"ר יעקב גרינשפן' },
+  'shahar.kgn@gmail.com':         { name: 'שחר קגן',              password: 'שחר קגן' },
+  'berkovitz.inbal@gmail.com':    { name: 'ענבל ברקוביץ',         password: 'ענבל ברקוביץ' },
+  'galdulev@gmail.com':           { name: 'גל דולב',              password: 'גל דולב' },
+  'zaguri@gmail.com':             { name: 'טל זגורי',             password: 'טל זגורי' },
+  'idozaifman@gmail.com':         { name: 'עידו זייפמן וקרן שגב', password: 'עידו זייפמן וקרן שגב' },
+};
+
+const TOKEN_SECRET = process.env.TOKEN_SECRET || 'designai7-secret';
+
 function readAll() {
   return fs.readFileSync(DB, 'utf8').split('\n').filter(Boolean)
     .map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
@@ -23,8 +39,7 @@ function getAdminToken() {
 }
 
 function getSpeakerToken(speakerName) {
-  const pass = process.env.SPEAKER_PASSWORD || 'designai7';
-  return crypto.createHmac('sha256', pass).update(speakerName).digest('hex');
+  return crypto.createHmac('sha256', TOKEN_SECRET).update(speakerName).digest('hex');
 }
 
 function isAdmin(req) {
@@ -36,16 +51,10 @@ function getSpeakerFromToken(req) {
   const auth = req.headers.authorization;
   if (!auth || !auth.startsWith('Bearer ')) return null;
   const token = auth.slice(7);
-  const pass = process.env.SPEAKER_PASSWORD || 'designai7';
-  // find which speaker this token matches
-  const SPEAKERS = [
-    'דניאל בוארון','עומרי הרמן','גל דולב','חן האנה ויצמן','ד"ר יעקב גרינשפן',
-    'רון ברנוב','שחר קגן','עידו זייפמן וקרן שגב','ענבל ברקוביץ','טל זגורי',
-    'שירה וינברג הראל','שלי אור גיסר'
-  ];
-  return SPEAKERS.find(name =>
-    crypto.createHmac('sha256', pass).update(name).digest('hex') === token
-  ) || null;
+  const match = Object.values(SPEAKER_CREDENTIALS).find(sp =>
+    getSpeakerToken(sp.name) === token
+  );
+  return match ? match.name : null;
 }
 
 // Submit rehearsal feedback
@@ -73,13 +82,15 @@ app.post('/api/admin/login', (req, res) => {
   }
 });
 
-// Speaker login
+// Speaker login — email + name as password
 app.post('/api/speaker/login', (req, res) => {
-  const { speakerName, password } = req.body || {};
-  const speakerPass = process.env.SPEAKER_PASSWORD || 'designai7';
-  if (!speakerName) return res.status(400).json({ error: 'שם מרצה חסר' });
-  if (password !== speakerPass) return res.status(401).json({ error: 'קוד גישה שגוי' });
-  res.json({ ok: true, token: getSpeakerToken(speakerName), speakerName });
+  const { email, password } = req.body || {};
+  const emailLower = (email || '').toLowerCase().trim();
+  const cred = SPEAKER_CREDENTIALS[emailLower];
+  if (!cred || cred.password !== (password || '').trim()) {
+    return res.status(401).json({ error: 'אימייל או סיסמה שגויים' });
+  }
+  res.json({ ok: true, token: getSpeakerToken(cred.name), speakerName: cred.name });
 });
 
 // Get all rehearsal responses (admin)
