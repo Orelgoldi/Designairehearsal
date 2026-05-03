@@ -13,16 +13,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // email → { name, password }
 const SPEAKER_CREDENTIALS = {
-  'shellygisser@gmail.com':       { name: 'שלי אור גיסר',         password: 'שלי אור גיסר' },
-  'shira@go-beyondai.com':        { name: 'שירה וינברג הראל',     password: 'שירה וינברג הראל' },
-  'daniel.boaron2303@gmail.com':  { name: 'דניאל בוארון',         password: 'דניאל בוארון' },
-  'rbaranov@figma.com':           { name: 'רון ברנוב',            password: 'רון ברנוב' },
-  'greenshpan.yaakov@gmail.com':  { name: 'ד"ר יעקב גרינשפן',    password: 'ד"ר יעקב גרינשפן' },
-  'shahar.kgn@gmail.com':         { name: 'שחר קגן',              password: 'שחר קגן' },
-  'berkovitz.inbal@gmail.com':    { name: 'ענבל ברקוביץ',         password: 'ענבל ברקוביץ' },
-  'galdulev@gmail.com':           { name: 'גל דולב',              password: 'גל דולב' },
-  'zaguri@gmail.com':             { name: 'טל זגורי',             password: 'טל זגורי' },
-  'idozaifman@gmail.com':         { name: 'עידו זייפמן וקרן שגב', password: 'עידו זייפמן וקרן שגב' },
+  'shellygisser@gmail.com':       { name: 'שלי אור גיסר',         password: 'Shelly' },
+  'shira@go-beyondai.com':        { name: 'שירה וינברג הראל',     password: 'Shira' },
+  'daniel.boaron2303@gmail.com':  { name: 'דניאל בוארון',         password: 'Daniel' },
+  'rbaranov@figma.com':           { name: 'רון ברנוב',            password: 'Ron' },
+  'greenshpan.yaakov@gmail.com':  { name: 'ד"ר יעקב גרינשפן',    password: 'Yaakov' },
+  'shahar.kgn@gmail.com':         { name: 'שחר קגן',              password: 'Shahar' },
+  'berkovitz.inbal@gmail.com':    { name: 'ענבל ברקוביץ',         password: 'Inbal' },
+  'galdulev@gmail.com':           { name: 'גל דולב',              password: 'Gal' },
+  'zaguri@gmail.com':             { name: 'טל זגורי',             password: 'Tal' },
+  'idozaifman@gmail.com':         { name: 'עידו זייפמן וקרן שגב', password: 'Ido' },
 };
 
 const TOKEN_SECRET = process.env.TOKEN_SECRET || 'designai7-secret';
