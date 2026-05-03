@@ -82,6 +82,15 @@ app.post('/api/admin/login', (req, res) => {
   }
 });
 
+// Bulk import (admin only — one-time restore)
+app.post('/api/admin/import', (req, res) => {
+  if (!isAdmin(req)) return res.status(401).json({ error: 'אין הרשאה' });
+  const records = req.body;
+  if (!Array.isArray(records)) return res.status(400).json({ error: 'expected array' });
+  fs.writeFileSync(DB, records.map(r => JSON.stringify(r)).join('\n') + '\n');
+  res.json({ ok: true, count: records.length });
+});
+
 // Speaker login — email + name as password
 app.post('/api/speaker/login', (req, res) => {
   const { email, password } = req.body || {};
